@@ -1,0 +1,37 @@
+#! /bin/sh
+if [ $# -eq 0 ]
+then
+  echo "Usage:$0 directory"
+else
+for myDir in $*
+do
+if test -d $myDir
+then
+  echo "In $myDir"
+  cd $myDir
+  echo 'ls *.txt *.sh color'
+else
+  echo "Error:Direct $myDir cant't found!"
+fi
+done
+fi
+exit 0;
+show.bsh: new file: 20 lines, 236 characters
+#! /bin/sh
+if [ $# -eq 0 ]
+then
+  echo "Usage:$0 directory"
+else
+for myDir in $*
+do
+if test -d $myDir
+then
+  echo "In $myDir"
+  cd $myDir
+  echo 'ls *.txt *.sh color'
+else
+  echo "Error:Direct $myDir cant't found!"
+fi
+done
+fi
+exit 0;
