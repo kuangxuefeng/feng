@@ -1,0 +1,10 @@
+#!/bin/bash
+echo "Program name is $0"
+if test $# -eq 0
+then
+echo "please specify a fie!"
+else
+gzip $1
+rm $1.gz
+echo "file $1 is deleted!"
+fi
