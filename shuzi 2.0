@@ -1,0 +1,123 @@
+#!/bin/bash
+
+clear
+echo
+echo "###################################################################"
+echo "#              这是一个shell编写的数字游戏                        #"
+echo "#                    猜一个四位数字                               #"
+echo "#                       版本 2.0                                  #"
+echo "###################################################################"
+echo -e "\n\n"
+
+declare INPUT
+declare PASSWORD
+declare A
+declare B
+declare X
+declare Y
+declare LOOP
+declare C
+declare D #预留的变量，还没使用
+
+
+#这个功能初始化变量的密码,用户需要猜测
+init_password()
+{
+        PASSWORD=`echo $(($RANDOM%10000))`
+        echo $PASSWORD | grep '^[0-9]\{4\}$' >/dev/null 2>&1
+        if [ $? != 0 ]
+        then
+                init_password
+        else
+                input
+        fi
+}
+
+#这个功能接受来自用户的键盘输入的数字
+input()
+{
+        echo -n "请输入一个四位数 (0000-9999):"
+        read INPUT
+        echo $INPUT | grep '^[0-9]\{4\}$' >/dev/null 2>&1
+        if [ $? != 0 ]
+        then
+                echo "请输入四位纯数字！"
+                input
+        else
+                judge
+        fi
+}
+
+#这个是主模块功能
+judge()
+{
+        C=全错
+        D=全错
+        X=$INPUT
+        Y=$PASSWORD
+        while [ $INPUT != $PASSWORD ]
+        do
+                A=0
+                B=0
+                judge_a
+                judge_b
+                LOOP=`expr $LOOP + 1`
+                echo "************************************************"
+                echo "# "$A"位数字大小和位置都对，"$B"位只有大小猜对# "
+                echo "#        你输入的数字为：$INPUT               # "
+                echo "#    大小和位置没有同时猜对的数字为：$C      #"
+                echo "                                              "
+                echo "************************************************"
+                input
+        done
+}
+
+#这个功能计算变量A的值
+judge_a()
+{
+                for i in `seq 4`
+                do
+                        VAR_INPUT=`expr substr "$X" $i 1`
+                        for j in `seq 4`
+                        do
+                                VAR_PASSWORD=`expr substr "$Y" $j 1`
+                                if [[ $VAR_INPUT = $VAR_PASSWORD && $VAR_INPUT != "" && $VAR_PASSWORD != "" && $i = $j ]]
+                                then
+                                        C=`expr substr $X 1 "$[$i-1]"``expr substr $X "$[$i+1]" 4`
+                                        A=`expr $A + 1`
+                                        X=`expr substr $X 1 "$[$i-1]"``expr substr $X "$[$i+1]" 4`
+                                        Y=`expr substr $Y 1 "$[$i-1]"``expr substr $Y "$[$i+1]" 4`
+                                        judge_a
+                                fi
+                        done
+                done
+}
+
+#这个功能计算变量B的值
+judge_b()
+{
+                for i in `seq 4`
+                do
+                        VAR_INPUT=`expr substr "$X" $i 1`
+                        for j in `seq 4`
+                        do
+                                VAR_PASSWORD=`expr substr "$Y" $j 1`
+                                if [[ $VAR_INPUT = $VAR_PASSWORD && $VAR_INPUT != "" && $VAR_PASSWORD != "" ]]
+                                then
+                                        B=`expr $B + 1`
+                                        X=`expr substr "$X" 1 "$[$i-1]"``expr substr "$X" "$[$i+1]" 4`
+                                        Y=`expr substr "$Y" 1 "$[$j-1]"``expr substr "$Y" "$[$j+1]" 4`
+                                        judge_b
+                                fi
+                        done
+                done
+}
+
+#这是脚本的开始
+LOOP=1
+init_password
+echo "#############################################"
+echo "#         恭喜你，你已经试过 $LOOP 次       #"
+echo "#             正确的数字是 $PASSWORD !             #"
+echo "#############################################"
+
