@@ -108,7 +108,7 @@ judge_b()
 LOOP=1
 init_password
 echo "#############################################"
-echo "#congratulations!You have tried $LOOP times!    #"
-echo "#        The password is $PASSWORD !             #"
+echo "#       恭喜你，你已经试过 $LOOP 次                   #"
+echo "#        正确的数字是  $PASSWORD !             #"
 echo "#############################################"
 
